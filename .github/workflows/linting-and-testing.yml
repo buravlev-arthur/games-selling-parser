@@ -33,7 +33,7 @@ jobs:
         run: bun test
 
       - name: Reporting test-coverage to Codeclimate
-        uses: paambaati/codeclimate-action@v2.7.4
+        uses: paambaati/codeclimate-action@v5.0.0
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_ID }}
         with:
