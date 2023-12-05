@@ -7,7 +7,8 @@
     "lint": "eslint ./**/*.ts",
     "format:check": "bunx prettier ./**/*.{ts,json} --check",
     "format:write": "bunx prettier ./**/*.{ts,json} --write",
-    "test": "bunx vitest --run",
+    "test": "bun test",
+    "test:coverage": "bun test --coverage",
     "husky:prepare": "husky install"
   },
   "devDependencies": {
@@ -15,6 +16,7 @@
     "@types/module-alias": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
+    "@vitest/coverage-v8": "^1.0.1",
     "bun-types": "latest",
     "eslint": "^8.55.0",
     "husky": "^8.0.0",

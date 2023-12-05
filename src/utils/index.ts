@@ -20,11 +20,11 @@ export const createAxiosInstance: CreateAxiosInstance = (baseUrl, responseType) 
     },
   });
 
-export function parseBuffer<T = unknown>(data: ArrayBuffer, format: 'json' | 'text'): Promise<T | Error> {
-  return new Promise((resolve, reject) => {
-    zlib.gunzip(data, (error, output) => {
-      if (error) reject(error);
-      const result = format === 'json' ? JSON.parse(String(output)) : String(output);
+export function parseBuffer<T = unknown>(data: Buffer, format: 'json' | 'text'): Promise<T> {
+  return new Promise((resolve) => {
+    zlib.gunzip(data, (_error, output) => {
+      const text = output ? output.toString() : data.toString();
+      const result = format === 'json' ? JSON.parse(text) : text;
       resolve(result);
     });
   });

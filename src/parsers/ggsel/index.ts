@@ -10,7 +10,7 @@ const path = `${apiUrl.pathname}${apiUrl.search}`;
 
 export const getGamesList: GetGamesList<GamesList> = async (name, platform, totalCount = RequestDefaultCount) => {
   const body = getRequestBody(name, platforms[platform] as number, totalCount);
-  const { data } = await axios.post<ArrayBuffer>(path, body);
+  const { data } = await axios.post<Buffer>(path, body);
   const responseBody = await parseBuffer<ResponseBody>(data, 'json');
   return (responseBody as ResponseBody).hits.hits;
 };
