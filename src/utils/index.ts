@@ -2,7 +2,6 @@ import userAgents from '@/const/userAgents';
 import axios from 'axios';
 import type { CreateAxiosInstance } from '@/types';
 import zlib from 'zlib';
-import type {} from 'zlib';
 
 export const getRandomUserAgent: () => string = () => {
   const totalCount = userAgents.length;
@@ -13,26 +12,20 @@ export const createAxiosInstance: CreateAxiosInstance = (baseUrl, responseType) 
   axios.create({
     baseURL: baseUrl,
     decompress: false,
-    responseType: 'stream',
-    transformResponse: async (data): Promise<object | Error> =>
-      new Promise((resolve, reject) => {
-        const gunzip = zlib.createGunzip();
-        const buffer: string[] = [];
-        data.pipe(gunzip);
-        gunzip
-          .on('data', (data) => {
-            buffer.push(data.toString());
-          })
-          .on('end', () => {
-            resolve(JSON.parse(buffer.join('')));
-          })
-          .on('error', (err) => {
-            reject(err);
-          });
-      }),
+    responseType: 'arraybuffer',
     headers: {
       'User-Agent': getRandomUserAgent(),
       'Content-Type': responseType,
       'Accept-Encoding': 'gzip',
     },
   });
+
+export function parseBuffer<T = unknown>(data: ArrayBuffer, format: 'json' | 'text'): Promise<T | Error> {
+  return new Promise((resolve, reject) => {
+    zlib.gunzip(data, (error, output) => {
+      if (error) reject(error);
+      const result = format === 'json' ? JSON.parse(String(output)) : String(output);
+      resolve(result);
+    });
+  });
+}

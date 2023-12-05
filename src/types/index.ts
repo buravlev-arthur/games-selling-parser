@@ -10,7 +10,7 @@ export enum PlatformName {
   epicGames = 'epicGames',
 }
 
-export type GetGamesList = (name: string, platform: PlatformName, totalCount?: number) => Promise<unknown>;
+export type GetGamesList<T> = (name: string, platform: PlatformName, totalCount?: number) => Promise<T | Error>;
 
 export type ResponseType = 'application/json' | 'text/html';
 

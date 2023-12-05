@@ -30,4 +30,23 @@ export interface RequestBody {
   };
 }
 
+export interface ResponseBody {
+  hits: {
+    hits: Array<{
+      _source: {
+        id_goods: number;
+        id_seller: number;
+        name: string;
+        seller_name: string;
+        name_section: string;
+        name_en: string;
+        price_wmr: number;
+        rating: number;
+      };
+    }>;
+  };
+}
+
+export type GamesList = ResponseBody['hits']['hits'];
+
 export type GetRequestBody = (name: string, platformId: number, totalCount: number) => RequestBody;
