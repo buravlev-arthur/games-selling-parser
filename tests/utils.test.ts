@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from 'bun:test';
 import userAgents from '@/const/userAgents';
 import { binaryResponse } from './__fixtures__';
 import { getRandomUserAgent, createAxiosInstance, parseBuffer } from '@/utils';
@@ -23,9 +23,13 @@ describe('Test utils', () => {
 
   it('parseBuffer', async () => {
     const { withComporessing, withoutCompressing } = binaryResponse;
-    expect(await parseBuffer(withoutCompressing.response, 'json')).toEqual(withoutCompressing.json);
-    expect(await parseBuffer(withoutCompressing.response, 'text')).toEqual(withoutCompressing.text);
-    expect(await parseBuffer(withComporessing.response, 'json')).toEqual(withComporessing.json);
-    expect(await parseBuffer(withComporessing.response, 'text')).toEqual(withComporessing.text);
+    expect(await parseBuffer(withoutCompressing.response, 'json')).toEqual(
+      withoutCompressing.json as unknown as undefined,
+    );
+    expect(await parseBuffer(withoutCompressing.response, 'text')).toEqual(
+      withoutCompressing.text as unknown as undefined,
+    );
+    expect(await parseBuffer(withComporessing.response, 'json')).toEqual(withComporessing.json as unknown as undefined);
+    expect(await parseBuffer(withComporessing.response, 'text')).toEqual(withComporessing.text as unknown as undefined);
   });
 });
