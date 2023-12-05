@@ -31,11 +31,3 @@ jobs:
 
       - name: Testing
         run: bun test
-
-      - name: Reporting test-coverage to Codeclimate
-        uses: paambaati/codeclimate-action@v5.0.0
-        env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CODECLIMATE_ID }}
-        with:
-          coverageCommand: bun test:coverage
-          debug: true
