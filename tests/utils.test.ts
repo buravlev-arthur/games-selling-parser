@@ -22,10 +22,13 @@ describe('Test utils', () => {
   });
 
   it('parseBuffer', async () => {
-    const { withComporessing, withoutCompressing } = binaryResponse;
+    const { withComporessing, withoutCompressing, htmlContent } = binaryResponse;
+    const document = await parseBuffer<Document>(htmlContent.response, 'html');
     expect<object>(await parseBuffer(withoutCompressing.response, 'json')).toEqual(withoutCompressing.json);
     expect<string>(await parseBuffer(withoutCompressing.response, 'text')).toEqual(withoutCompressing.text);
     expect<object>(await parseBuffer(withComporessing.response, 'json')).toEqual(withComporessing.json);
     expect<string>(await parseBuffer(withComporessing.response, 'text')).toEqual(withComporessing.text);
+    expect<string>(document.querySelector('h1')?.textContent as string).toEqual(htmlContent.headerText);
+    expect<string>(document.querySelector('p')?.textContent as string).toEqual(htmlContent.paragraphText);
   });
 });

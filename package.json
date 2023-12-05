@@ -12,6 +12,7 @@
     "husky:prepare": "husky install"
   },
   "devDependencies": {
+    "@types/jsdom": "^21.1.6",
     "@types/lodash": "^4.14.202",
     "@types/module-alias": "^2.0.4",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
@@ -26,7 +27,7 @@
   },
   "dependencies": {
     "axios": "^1.6.2",
-    "cheerio": "^1.0.0-rc.12",
+    "jsdom": "^23.0.1",
     "knex": "^3.0.1",
     "lodash": "^4.17.21",
     "mysql2": "^3.6.5",

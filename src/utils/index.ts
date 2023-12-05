@@ -2,6 +2,7 @@ import userAgents from '@/const/userAgents';
 import axios from 'axios';
 import type { CreateAxiosInstance } from '@/types';
 import zlib from 'zlib';
+import { JSDOM } from 'jsdom';
 
 export const getRandomUserAgent: () => string = () => {
   const totalCount = userAgents.length;
@@ -20,12 +21,23 @@ export const createAxiosInstance: CreateAxiosInstance = (baseUrl, responseType) 
     },
   });
 
-export function parseBuffer<T = unknown>(data: Buffer, format: 'json' | 'text'): Promise<T> {
+export function parseBuffer<T = unknown>(data: Buffer, format: 'json' | 'text' | 'html'): Promise<T> {
   return new Promise((resolve) => {
     zlib.gunzip(data, (_error, output) => {
       const text = output ? output.toString() : data.toString();
-      const result = format === 'json' ? JSON.parse(text) : text;
-      resolve(result);
+      switch (format) {
+        case 'text':
+          resolve(text as T);
+          break;
+        case 'json':
+          resolve(JSON.parse(text) as T);
+          break;
+        case 'html':
+          resolve(new JSDOM(text).window.document as T);
+          break;
+        default:
+          throw Error('Incorrect "format" parameter in parseBuffer util function');
+      }
     });
   });
 }
