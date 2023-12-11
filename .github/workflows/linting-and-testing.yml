@@ -10,6 +10,14 @@ jobs:
       - name: Cloning the repository
         uses: actions/checkout@v2
 
+      - name: Setting env vars
+        run: |
+          echo "DB_HOST=${{ secrets.DB_HOST }}" >> "$GITHUB_ENV"
+          echo "DB_USER=${{ secrets.DB_USER }}" >> "$GITHUB_ENV"
+          echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> "$GITHUB_ENV"
+          echo "DB_PORT=${{ secrets.DB_PORT }}" >> "$GITHUB_ENV"
+          echo "DB_NAME=${{ secrets.DB_NAME }}" >> "$GITHUB_ENV"
+
       - name: Installing node
         uses: actions/setup-node@v2
         with:
