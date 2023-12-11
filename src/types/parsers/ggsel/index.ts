@@ -1,9 +1,3 @@
-import type { PlatformName } from '@/types';
-
-export type Platforms = {
-  [key in PlatformName]?: number;
-};
-
 interface Must {
   query_string?: {
     query: string;
@@ -30,23 +24,31 @@ export interface RequestBody {
   };
 }
 
+export interface ResponseBodySourse {
+  id_goods: number;
+  id_seller: number;
+  name: string;
+  seller_name: string;
+  name_section: string;
+  name_en: string;
+  price_wmr: number;
+  rating: number;
+}
+
+export interface ResponseBodySourseWithEditionId extends ResponseBodySourse {
+  editionId: number;
+}
+
 export interface ResponseBody {
   hits: {
     hits: Array<{
-      _source: {
-        id_goods: number;
-        id_seller: number;
-        name: string;
-        seller_name: string;
-        name_section: string;
-        name_en: string;
-        price_wmr: number;
-        rating: number;
-      };
+      _source: ResponseBodySourse;
     }>;
   };
 }
 
 export type GamesList = ResponseBody['hits']['hits'];
 
-export type GetRequestBody = (name: string, platformId: number, totalCount: number) => RequestBody;
+export type GamesListGroupedByEdition = Record<string, Array<ResponseBodySourseWithEditionId>>;
+
+export type GetRequestBody = (name: string, categoryId: number, totalCount: number) => RequestBody;
