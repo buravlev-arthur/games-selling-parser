@@ -7,9 +7,9 @@ import {
   parseBuffer,
   getGameIdByName,
   getEditionIdByName,
-  getPlatformIdByName,
-  getShopIdByName,
+  getItemIdByName,
   getPricesData,
+  isIncludesSubstring,
 } from '@/utils';
 import { createDatabaseConnection } from '@/database';
 
@@ -50,6 +50,14 @@ describe('Test utils', () => {
     expect<number>(getGameIdByName('DiABlo IV', games)).toEqual(id);
   });
 
+  it('isIncludesSubstring', () => {
+    const str = 'Grand Theft Auto V Premium Edit. XBOX ONE GTA V ключ 🔑';
+    const substr = 'Grand Theft Auto V';
+    const wrongSubstr = 'Grand Theft Auto 5';
+    expect(isIncludesSubstring(str, substr)).toBeTrue();
+    expect(isIncludesSubstring(str, wrongSubstr)).toBeFalse();
+  });
+
   it('getEditionIdByName', async () => {
     const db = createDatabaseConnection();
     const editions = await db('editions').orderBy('id');
@@ -67,7 +75,7 @@ describe('Test utils', () => {
     const platforms = await db('platforms').orderBy('id');
     await db.destroy();
     const { id } = platforms.find(({ name }) => name === 'Steam');
-    expect<number>(getPlatformIdByName('STEAM', platforms)).toEqual(id);
+    expect<number>(getItemIdByName('STEAM', platforms)).toEqual(id);
   });
 
   it('getShopIdByName', async () => {
@@ -75,7 +83,7 @@ describe('Test utils', () => {
     const shops = await db('shops').orderBy('id');
     await db.destroy();
     const { id } = shops.find(({ name }) => name === 'ggsel');
-    expect<number>(getShopIdByName('GGSEL.com', shops)).toEqual(id);
+    expect<number>(getItemIdByName('GGSEL.com', shops)).toEqual(id);
   });
 
   it('getPricesData', () => {

@@ -5,8 +5,7 @@ import {
   parseBuffer,
   getGameIdByName,
   getEditionIdByName,
-  getPlatformIdByName,
-  getShopIdByName,
+  getItemIdByName,
   getPricesData,
 } from '@/utils';
 import type { GetGamesList, GameDataInsertInstances } from '@/types';
@@ -53,8 +52,7 @@ const getSummaryGameData = async (
   shopName: string,
   verbose: boolean,
 ): Promise<GameDataInsertInstances> => {
-  if (verbose)
-    console.log(`➤ Try to prepare raw data of game: "${gameName}", platform: "${platformName}" for a database`);
+  if (verbose) console.log(`➤ Try to prepare data of game: "${gameName}", platform: "${platformName}" for a database`);
   const db = createDatabaseConnection();
   const { games, platforms: dbPlatforms, shops } = await getAllDatabaseData(db);
   db.destroy();
@@ -64,12 +62,11 @@ const getSummaryGameData = async (
     .reduce((acc: GameDataInsertInstances, [editionId, editionGames]) => {
       const prices = editionGames.map(({ price_wmr }) => price_wmr);
       const { min, max, avg } = getPricesData(prices);
-      const rawGameName = editionGames[0].name;
       const editionData = {
-        name: getGameIdByName(rawGameName, games),
+        name: getGameIdByName(editionGames[0].name, games),
         edition: Number(editionId),
-        platform: getPlatformIdByName(platformName, dbPlatforms),
-        shop: getShopIdByName(shopName, shops),
+        platform: getItemIdByName(platformName, dbPlatforms),
+        shop: getItemIdByName(shopName, shops),
         price_min: min,
         price_max: max,
         price_avg: avg,

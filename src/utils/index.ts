@@ -42,13 +42,17 @@ export function parseBuffer<T = unknown>(data: Buffer, format: 'json' | 'text' |
   });
 }
 
+export const isIncludesSubstring = (str: string, substr: string): boolean => {
+  return !!substr.length && str.toLowerCase().includes(substr.toLowerCase());
+};
+
 export const getGameIdByName = (gameName: string, gamesList: Games): number => {
   const game = gamesList.find(
     ({ name, alias, alias_2, alias_3 }) =>
-      gameName.toLowerCase().includes(name.toLowerCase()) ||
-      (alias.length && gameName.toLowerCase().includes(alias.toLowerCase())) ||
-      (alias_2.length && gameName.toLowerCase().includes(alias_2.toLowerCase())) ||
-      (alias_3.length && gameName.toLowerCase().includes(alias_3.toLowerCase())),
+      isIncludesSubstring(gameName, name) ||
+      isIncludesSubstring(gameName, alias) ||
+      isIncludesSubstring(gameName, alias_2) ||
+      isIncludesSubstring(gameName, alias_3),
   );
   return game?.id ?? -1;
 };
@@ -67,14 +71,9 @@ export const getEditionIdByName = (gameNames: Array<string>, editionsList: Editi
   return editionId;
 };
 
-export const getPlatformIdByName = (platformName: string, platformsList: Platforms): number => {
-  const platform = platformsList.find(({ name }) => platformName.toLowerCase().includes(name.toLowerCase()));
+export const getItemIdByName = (itemName: string, itemsList: Platforms | Shops): number => {
+  const platform = itemsList.find(({ name }) => itemName.toLowerCase().includes(name.toLowerCase()));
   return platform?.id ?? -1;
-};
-
-export const getShopIdByName = (shopName: string, shopsList: Shops): number => {
-  const shop = shopsList.find(({ name }) => shopName.toLowerCase().includes(name.toLowerCase()));
-  return shop?.id ?? -1;
 };
 
 export const getPricesData = (prices: Array<number>): PricesData => ({
