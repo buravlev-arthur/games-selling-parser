@@ -51,4 +51,4 @@ export type GamesList = ResponseBody['hits']['hits'];
 
 export type GamesListGroupedByEdition = Record<string, Array<ResponseBodySourseWithEditionId>>;
 
-export type GetRequestBody = (name: string, categoryId: number, totalCount: number) => RequestBody;
+export type GetRequestBody = (name: string, categoryId: number, platformId: number, totalCount: number) => RequestBody;

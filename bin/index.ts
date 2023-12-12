@@ -1,3 +1,3 @@
-#!/usr/bin/env node
+import startParse from '@/index';
 
-console.info('Parser is running...');
+startParse(true);

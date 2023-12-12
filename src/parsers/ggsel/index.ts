@@ -11,17 +11,26 @@ import {
 } from '@/utils';
 import type { GetGamesList, GameDataInsertInstances } from '@/types';
 import type { ResponseBody, GamesList, GamesListGroupedByEdition } from '@/types/parsers/ggsel';
-import { apiUrl, getRequestBody, platforms } from '@/const/parsers/ggsel';
-import { RequestDefaultCount } from '@/const';
+import { apiUrl, getRequestBody, platforms, categories, shopName } from '@/const/parsers/ggsel';
+import { parserSettings } from '@/const';
 
 const axios = createAxiosInstance(apiUrl.origin, 'application/json');
 
-const getRawOffersList: GetGamesList<GamesList> = async (name, platform, totalCount = RequestDefaultCount) => {
-  const categoryId = platforms[platform] ?? 0;
+const getRawOffersList: GetGamesList<GamesList> = async (
+  name,
+  platform,
+  totalCount = parserSettings.count,
+  verbose,
+) => {
+  const platformId = platforms[platform] ?? 0;
+  const categoryId = categories[platform] ?? 0;
   const path = `${apiUrl.pathname}${apiUrl.search}`;
-  const body = getRequestBody(name, categoryId, totalCount);
+  const body = getRequestBody(name, categoryId, platformId, totalCount);
+  if (verbose) console.log(`✈ Try to get raw data for game: "${name}", platform: ${platform}`);
   const { data } = await axios.post<Buffer>(path, body);
   const responseBody = await parseBuffer<ResponseBody>(data, 'json');
+  if (verbose)
+    console.log(`✓ Raw data of game: "${name}", platform: "${platform}" was got and processed successfully!`);
   return responseBody.hits.hits;
 };
 
@@ -39,15 +48,19 @@ const getOffersListGroupedByEdition = async (rawList: GamesList): Promise<GamesL
 
 const getSummaryGameData = async (
   rawList: GamesList,
+  gameName: string,
   platformName: string,
   shopName: string,
+  verbose: boolean,
 ): Promise<GameDataInsertInstances> => {
+  if (verbose)
+    console.log(`➤ Try to prepare raw data of game: "${gameName}", platform: "${platformName}" for a database`);
   const db = createDatabaseConnection();
   const { games, platforms: dbPlatforms, shops } = await getAllDatabaseData(db);
   db.destroy();
 
   const groupedGamesData = await getOffersListGroupedByEdition(rawList);
-  return Object.entries(groupedGamesData)
+  const summaryResult = Object.entries(groupedGamesData)
     .reduce((acc: GameDataInsertInstances, [editionId, editionGames]) => {
       const prices = editionGames.map(({ price_wmr }) => price_wmr);
       const { min, max, avg } = getPricesData(prices);
@@ -67,21 +80,29 @@ const getSummaryGameData = async (
       return [...acc, editionData];
     }, [])
     .filter(({ name }) => name !== -1);
+  if (verbose) console.log(`✓ Data of game: "${gameName}", platform: "${platformName}" was prepared successfully!`);
+  return summaryResult;
 };
 
-export const init = async (games: Array<string>, platformName: string, shopName: string, offersCount: number) => {
-  const data = await Promise.all(
+export default async (
+  games: Array<string>,
+  platforms: Array<string>,
+  count: number,
+  verbose: boolean,
+): Promise<GameDataInsertInstances> => {
+  if (verbose) console.info(`➤ Starting parse "${shopName}" shop...`);
+  const gamesStats = await Promise.all(
     games.map(async (game) => {
-      const rawOffersList = await getRawOffersList(game, platformName, offersCount);
-      const summaryGameData = await getSummaryGameData(rawOffersList, platformName, shopName);
-      return summaryGameData;
+      const platformsStats: Array<GameDataInsertInstances> = await Promise.all(
+        platforms.map(async (platform) => {
+          const rawOffersList = await getRawOffersList(game, platform, count, verbose);
+          const summaryGameData = await getSummaryGameData(rawOffersList, game, platform, shopName, verbose);
+          return summaryGameData;
+        }),
+      );
+      return platformsStats.flat();
     }),
   );
-  return data.flat();
+  if (verbose) console.info(`✔ "${shopName}" was parsed successfully!`);
+  return gamesStats.flat();
 };
-
-(async () => {
-  const result1 = await init(['Diablo 4', 'GTA 5'], 'xbox', 'ggsel', 10);
-  const result2 = await init(['GTA 5', 'Diablo 4'], 'steam', 'ggsel', 10);
-  console.log([result1, ...result2]);
-})();

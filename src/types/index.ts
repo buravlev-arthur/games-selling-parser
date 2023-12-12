@@ -32,7 +32,7 @@ export {
   GameDataInsertInstances,
 };
 
-export type GetGamesList<T> = (name: string, platform: string, totalCount?: number) => Promise<T>;
+export type GetGamesList<T> = (name: string, platform: string, totalCount: number, verbose: boolean) => Promise<T>;
 
 export type ResponseType = 'application/json' | 'text/html' | 'text/plain';
 
@@ -52,3 +52,16 @@ export interface PricesData {
   avg: number;
   max: number;
 }
+
+export interface ParserSettings {
+  games: Array<string>;
+  platforms: Array<string>;
+  count: number;
+}
+
+export type ParserFunction = (
+  games: ParserSettings['games'],
+  platforms: ParserSettings['platforms'],
+  count: ParserSettings['count'],
+  verbose: boolean,
+) => Promise<GameDataInsertInstances>;

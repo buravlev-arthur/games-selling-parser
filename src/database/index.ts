@@ -1,6 +1,16 @@
 import knex from 'knex';
 import type { Knex } from 'knex';
-import type { Platform, Publisher, Shop, Edition, Game, GameData, DatabaseData, Editions } from '@/types';
+import type {
+  Platform,
+  Publisher,
+  Shop,
+  Edition,
+  Game,
+  GameData,
+  DatabaseData,
+  Editions,
+  GameDataInsertInstances,
+} from '@/types';
 
 export const createDatabaseConnection = (): Knex =>
   knex({
@@ -27,4 +37,9 @@ export const getAllDatabaseData = async (db: Knex): Promise<DatabaseData> => {
 export const getEditions = async (db: Knex): Promise<Editions> => {
   const editions = await db<Edition>('editions').orderBy('id');
   return editions;
+};
+
+export const addDataToDatabase = async (db: Knex, rows: GameDataInsertInstances): Promise<Array<number>> => {
+  const queryResult: Array<number> = await db('games_data').insert(rows);
+  return queryResult;
 };

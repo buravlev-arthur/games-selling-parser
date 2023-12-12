@@ -1,9 +1,10 @@
 import { GetRequestBody } from '@/types/parsers/ggsel';
 
+export const shopName = 'ggsel';
 const base: string = 'https://a.ggsel.com';
 const url: string = '/elastic/goods/search?with_filters=1&with_categories=1';
 
-export const getRequestBody: GetRequestBody = (name, categoryId, totalCount) => ({
+export const getRequestBody: GetRequestBody = (name, categoryId, platformId, totalCount) => ({
   params: {
     body: {
       query: {
@@ -16,7 +17,7 @@ export const getRequestBody: GetRequestBody = (name, categoryId, totalCount) => 
             },
             {
               match: {
-                parent_category_ids: categoryId,
+                parent_category_ids: platformId,
               },
             },
             {
@@ -26,7 +27,7 @@ export const getRequestBody: GetRequestBody = (name, categoryId, totalCount) => 
             },
             {
               terms: {
-                content_type_id: [2],
+                content_type_id: [categoryId],
               },
             },
           ],
@@ -42,7 +43,12 @@ export const apiUrl: URL = new URL(url, base);
 
 export const platforms: Record<string, number> = {
   xbox: 16,
-  origin: 13,
+  playstation: 15,
   steam: 12,
-  uplay: 11,
+};
+
+export const categories: Record<string, number> = {
+  xbox: 2,
+  steam: 2,
+  playstation: 33,
 };
