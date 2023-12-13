@@ -97,11 +97,12 @@ export const getNameById = (searchId: number, items: Platforms | Shops | Edition
 };
 
 export const parseRowsToString = (rows: GameDataInsertInstances, databaseData: DatabaseData): string => {
-  const statisticLines = rows.reduce((str, { name, edition, shop, offers_count }) => {
+  const statisticLines = rows.reduce((str, { name, edition, shop, platform, offers_count }) => {
     const gameName = getNameById(name, databaseData.games);
     const editionName = getNameById(edition, databaseData.editions);
     const shopName = getNameById(shop, databaseData.shops);
-    const newLine = `shop: "${shopName}", game: "${gameName}", edition: "${editionName}", offers count: ${offers_count}\n`;
+    const platformName = getNameById(platform, databaseData.platforms);
+    const newLine = `shop: "${shopName}", game: "${gameName}", edition: "${editionName}", platform: "${platformName}", offers count: ${offers_count}\n`;
     return str + newLine;
   }, '');
   const total = rows.reduce((count, { offers_count }) => count + offers_count, 0);

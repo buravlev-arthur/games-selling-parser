@@ -76,8 +76,8 @@ export const binaryResponse = {
 };
 
 export const parsedStrFromRows = `\
-shop: "ggsel", game: "Diablo 4", edition: "Standard", offers count: 54
-shop: "ggsel", game: "Diablo 4", edition: "Ultimate", offers count: 6
+shop: "ggsel", game: "Diablo 4", edition: "Standard", platform: "Steam", offers count: 54
+shop: "ggsel", game: "Diablo 4", edition: "Ultimate", platform: "Steam", offers count: 6
 total: 60\
 `;
 
