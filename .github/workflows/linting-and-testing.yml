@@ -17,6 +17,9 @@ jobs:
           echo "DB_PASSWORD=${{ secrets.DB_PASSWORD }}" >> "$GITHUB_ENV"
           echo "DB_PORT=${{ secrets.DB_PORT }}" >> "$GITHUB_ENV"
           echo "DB_NAME=${{ secrets.DB_NAME }}" >> "$GITHUB_ENV"
+          echo "MAIL_USER=${{ secrets.MAIL_USER }}" >> "$GITHUB_ENV"
+          echo "MAIL_PASSWORD=${{ secrets.MAIL_PASSWORD }}" >> "$GITHUB_ENV"
+          echo "MAIL_TO=${{ secrets.MAIL_TO }}" >> "$GITHUB_ENV"
 
       - name: Installing node
         uses: actions/setup-node@v2

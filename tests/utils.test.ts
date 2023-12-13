@@ -1,6 +1,6 @@
 import { describe, it, expect } from 'bun:test';
 import userAgents from '@/const/userAgents';
-import { binaryResponse } from './__fixtures__';
+import { binaryResponse, databaseRows, parsedStrFromRows } from './__fixtures__';
 import {
   getRandomUserAgent,
   createAxiosInstance,
@@ -10,8 +10,11 @@ import {
   getItemIdByName,
   getPricesData,
   isIncludesSubstring,
+  getNameById,
+  parseRowsToString,
 } from '@/utils';
-import { createDatabaseConnection } from '@/database';
+import sendMail from '@/utils/sendmail';
+import { createDatabaseConnection, getAllDatabaseData, getEditions } from '@/database';
 
 describe('Test utils', () => {
   it('getRandomUserAgent', () => {
@@ -92,5 +95,27 @@ describe('Test utils', () => {
     expect<number>(min).toEqual(-116);
     expect<number>(avg).toEqual(-3);
     expect<number>(max).toEqual(125);
+  });
+
+  it('getNameById', async () => {
+    const db = createDatabaseConnection();
+    const editions = await getEditions(db);
+    await db.destroy();
+    const searchId = 1;
+    const expectedName = editions.find(({ id }) => id === searchId)?.name ?? '';
+    expect(getNameById(1, editions)).toEqual(expectedName);
+  });
+
+  it('parseRowsToString', async () => {
+    const db = createDatabaseConnection();
+    const databaseData = await getAllDatabaseData(db);
+    await db.destroy();
+    const rows = databaseRows.slice(0, 2);
+    expect(parseRowsToString(rows, databaseData)).toEqual(parsedStrFromRows);
+  });
+
+  it('sendMail', async () => {
+    const { ok } = await sendMail('Test function');
+    expect(ok).toBeTrue();
   });
 });

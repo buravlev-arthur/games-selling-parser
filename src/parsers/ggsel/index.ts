@@ -25,11 +25,11 @@ const getRawOffersList: GetGamesList<GamesList> = async (
   const categoryId = categories[platform] ?? 0;
   const path = `${apiUrl.pathname}${apiUrl.search}`;
   const body = getRequestBody(name, categoryId, platformId, totalCount);
-  if (verbose) console.log(`✈ Try to get raw data for game: "${name}", platform: ${platform}`);
+  if (verbose) console.info(`✈ Try to get raw data for game: "${name}", platform: ${platform}`);
   const { data } = await axios.post<Buffer>(path, body);
   const responseBody = await parseBuffer<ResponseBody>(data, 'json');
   if (verbose)
-    console.log(`✓ Raw data of game: "${name}", platform: "${platform}" was got and processed successfully!`);
+    console.info(`✓ Raw data of game: "${name}", platform: "${platform}" was got and processed successfully!`);
   return responseBody.hits.hits;
 };
 
@@ -52,7 +52,7 @@ const getSummaryGameData = async (
   shopName: string,
   verbose: boolean,
 ): Promise<GameDataInsertInstances> => {
-  if (verbose) console.log(`➤ Try to prepare data of game: "${gameName}", platform: "${platformName}" for a database`);
+  if (verbose) console.info(`➤ Try to prepare data of game: "${gameName}", platform: "${platformName}" for a database`);
   const db = createDatabaseConnection();
   const { games, platforms: dbPlatforms, shops } = await getAllDatabaseData(db);
   db.destroy();
@@ -77,7 +77,7 @@ const getSummaryGameData = async (
       return [...acc, editionData];
     }, [])
     .filter(({ name }) => name !== -1);
-  if (verbose) console.log(`✓ Data of game: "${gameName}", platform: "${platformName}" was prepared successfully!`);
+  if (verbose) console.info(`✓ Data of game: "${gameName}", platform: "${platformName}" was prepared successfully!`);
   return summaryResult;
 };
 

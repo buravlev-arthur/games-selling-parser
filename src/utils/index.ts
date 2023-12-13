@@ -1,8 +1,18 @@
 import userAgents from '@/const/userAgents';
 import axios from 'axios';
-import type { CreateAxiosInstance, Platforms, Games, Editions, Shops, PricesData } from '@/types';
+import type {
+  CreateAxiosInstance,
+  Platforms,
+  Games,
+  Editions,
+  Shops,
+  PricesData,
+  GameDataInsertInstances,
+  DatabaseData,
+} from '@/types';
 import zlib from 'zlib';
 import { JSDOM } from 'jsdom';
+export { default as sendMail } from './sendmail';
 
 export const getRandomUserAgent: () => string = () => {
   const totalCount = userAgents.length;
@@ -81,3 +91,19 @@ export const getPricesData = (prices: Array<number>): PricesData => ({
   avg: Math.round(prices.reduce((acc, price) => (acc += price), 0) / prices.length),
   max: Math.round(Math.max(...prices)),
 });
+
+export const getNameById = (searchId: number, items: Platforms | Shops | Editions | Games): string => {
+  return items.find(({ id }) => id === searchId)?.name ?? '';
+};
+
+export const parseRowsToString = (rows: GameDataInsertInstances, databaseData: DatabaseData): string => {
+  const statisticLines = rows.reduce((str, { name, edition, shop, offers_count }) => {
+    const gameName = getNameById(name, databaseData.games);
+    const editionName = getNameById(edition, databaseData.editions);
+    const shopName = getNameById(shop, databaseData.shops);
+    const newLine = `shop: "${shopName}", game: "${gameName}", edition: "${editionName}", offers count: ${offers_count}\n`;
+    return str + newLine;
+  }, '');
+  const total = rows.reduce((count, { offers_count }) => count + offers_count, 0);
+  return `${statisticLines}total: ${total}`;
+};

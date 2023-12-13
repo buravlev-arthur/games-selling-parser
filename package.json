@@ -16,6 +16,7 @@
     "@types/jsdom": "^21.1.6",
     "@types/lodash": "^4.14.202",
     "@types/module-alias": "^2.0.4",
+    "@types/nodemailer": "^6.4.14",
     "@typescript-eslint/eslint-plugin": "^6.13.1",
     "@typescript-eslint/parser": "^6.13.1",
     "bun-types": "latest",
@@ -32,6 +33,7 @@
     "knex": "^3.0.1",
     "lodash": "^4.17.21",
     "mysql2": "^3.6.5",
+    "nodemailer": "^6.9.7",
     "zlib": "^1.0.5"
   }
 }

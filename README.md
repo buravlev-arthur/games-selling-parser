@@ -3,7 +3,7 @@
 
 # Парсер магазинов компьютерных игр
 
-Собирает статистику предложений по продаже ключей и подарков (гифтов)для трех ключевых платформ: [Steam](https://store.steampowered.com/), [XBOX](https://www.xbox.com/) и [PlayStation](https://www.playstation.com/).
+Собирает статистику предложений по продаже ключей и подарков (гифтов) для трех ключевых платформ: [Steam](https://store.steampowered.com/), [XBOX](https://www.xbox.com/) и [PlayStation](https://www.playstation.com/).
 
 Парсер анализирует данные следующих магазинов:
 
@@ -44,6 +44,9 @@ DB_USER="<database user>"
 DB_PASSWORD="<database password>"
 DB_NAME="<database name>"
 DB_PORT="<mysql-server's port>"
+MAIL_USER="<mail of sender>"
+MAIL_PASSWORD="<mail-service password>"
+MAIL_TO="<mail of receiver>"
 ```
 
 ## Запуск парсера
