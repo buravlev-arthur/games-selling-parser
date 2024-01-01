@@ -6,7 +6,6 @@ import type {
   Shop,
   Edition,
   Game,
-  GameData,
   DatabaseData,
   Editions,
   GameDataInsertInstances,
@@ -30,8 +29,7 @@ export const getAllDatabaseData = async (db: Knex): Promise<DatabaseData> => {
   const shops = await db<Shop>('shops').orderBy('id');
   const editions = await db<Edition>('editions').orderBy('id');
   const games = await db<Game>('games').orderBy('id');
-  const gamesData = await db<GameData>('games_data').orderBy('id');
-  return { platforms, publishers, shops, editions, games, gamesData };
+  return { platforms, publishers, shops, editions, games };
 };
 
 export const getEditions = async (db: Knex): Promise<Editions> => {

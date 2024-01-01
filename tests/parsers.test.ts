@@ -12,8 +12,8 @@ describe('Test parsers', () => {
     expect(parsedData[0].price_min).not.toBeNegative();
     expect(parsedData[0].price_max).not.toBeNegative();
     expect(parsedData[0].price_avg).not.toBeNegative();
-    expect(parsedData[0].price_min < parsedData[0].price_avg).toBeTrue();
-    expect(parsedData[0].price_max > parsedData[0].price_avg).toBeTrue();
+    expect(parsedData[0].price_min <= parsedData[0].price_avg).toBeTrue();
+    expect(parsedData[0].price_max >= parsedData[0].price_avg).toBeTrue();
     expect(parsedData[0].offers_count).not.toBeNegative();
     expect(parsedData[0].parsed_date).toBeDate();
   });

@@ -11,7 +11,6 @@ import {
   Game,
   Games,
   GameData,
-  GamesData,
   GameDataInsertInstance,
   GameDataInsertInstances,
 } from './database';
@@ -27,7 +26,6 @@ export {
   Game,
   Games,
   GameData,
-  GamesData,
   GameDataInsertInstance,
   GameDataInsertInstances,
 };
@@ -44,7 +42,6 @@ export interface DatabaseData {
   shops: Shops;
   editions: Editions;
   games: Games;
-  gamesData: GamesData;
 }
 
 export interface PricesData {

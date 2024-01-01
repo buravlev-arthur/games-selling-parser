@@ -52,5 +52,4 @@ export type Publishers = Array<Publisher>;
 export type Shops = Array<Shop>;
 export type Editions = Array<Edition>;
 export type Games = Array<Game>;
-export type GamesData = Array<GameData>;
 export type GameDataInsertInstances = Array<GameDataInsertInstance>;
