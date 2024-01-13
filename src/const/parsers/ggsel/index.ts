@@ -42,9 +42,9 @@ export const getRequestBody: GetRequestBody = (name, categoryId, platformId, tot
 export const apiUrl: URL = new URL(url, base);
 
 export const platforms: Record<string, number> = {
-  xbox: 16,
-  playstation: 15,
-  steam: 12,
+  xbox: 94,
+  playstation: 88,
+  steam: 100,
 };
 
 export const categories: Record<string, number> = {
